@@ -1,15 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>workshops</title>
-</head>
-<body>
-    <div>
-        <p>
-            Projeto workshops.
-        </p>
-    </div>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block content %}
+<header class="py-5 bg-image-full" style="background-image: url({% static 'img/ws.jpg' %}); height: 200px;">
+</header>
+
+<section class="py-5 text-dark">
+
+  <div class="container">
+    <a href="#">
+      <h1 class="text-center ">Workshop</h1>
+      <p>Apresentação sobre os workshops
+      </p>
+    </a>
+  </div>
+  <br>
+  <br>
+
+</section>
+
+{% endblock content %}
