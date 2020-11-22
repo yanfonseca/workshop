@@ -134,3 +134,4 @@ dmypy.json
 *.sqlite3
 .idea/
 staticfiles/
+*.ipynb
