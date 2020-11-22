@@ -3,8 +3,14 @@ from django.test import TestCase
 # Create your tests here.
 
 class HomeTest(TestCase):
-    
+
+    def setUp(self):
+        self.resp = self.client.get('')
+
     def test_get(self):
         """GET/Must return status code 200"""
-        resp = self.client.get('')
-        self.assertEqual(200, resp.status_code )
+        self.assertEqual(200, self.resp.status_code )
+
+    def test_template(self):
+        """Must return index.html"""
+        self.assertTemplateUsed(self.resp, 'index.html')
