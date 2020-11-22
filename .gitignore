@@ -131,3 +131,5 @@ dmypy.json
 
 #######
 .myenv
+*.sqlite3
+.idea/
