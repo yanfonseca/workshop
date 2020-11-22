@@ -1,6 +1,8 @@
 # Workshops
 Interface para criar workshops.
 
+[![Build Status](https://travis-ci.org/yanfonseca/workshop.svg?branch=main)](https://travis-ci.org/yanfonseca/workshop)
+
 ## Como desenvolver
 1. Clone o repositório
 1. Crie um virtualenv com Python 3.5 ou superior.
