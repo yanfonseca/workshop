@@ -17,7 +17,7 @@ cd workshop
 python -m venv .myenv
 source .myenv/bin/activate
 pip install -r requirements-dev.txt
-cp contrip/env-sample .env
+cp contrib/env-sample .env
 python manage.py test
 ```
 
