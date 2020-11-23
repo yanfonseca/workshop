@@ -1,8 +1,10 @@
 from django.test import TestCase
 from django.shortcuts import resolve_url as r
+from workshop.subscriptions.forms import SubscriptionForm
 
 class SubscribeTest(TestCase):
 
+    # Testa a página inscricao e seu form
     def setUp(self):
         # self.resp = self.client.get('/inscricao/')
         self.resp = self.client.get(r('inscricao'))
@@ -27,4 +29,10 @@ class SubscribeTest(TestCase):
         """Must contain csrf in the html"""
         self.assertContains(self.resp, 'csrfmiddlewaretoken')
 
-    ### Conectar html com o Django 762
+    # Conectar html e form
+    def test_has_form(self):
+        """Context must have subscription form"""
+        form = self.resp.context['form']
+        self.assertIsInstance(form, SubscriptionForm)
+
+
