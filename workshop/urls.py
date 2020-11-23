@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import path
 
 from workshop.core.views import home
+from workshop.subscriptions.views import subscribe
 
 urlpatterns = [
     path('', home, name='home'),
     path('admin/', admin.site.urls),
+    path('inscricao/', subscribe, name='inscricao'),
 ]

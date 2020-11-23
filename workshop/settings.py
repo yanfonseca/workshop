@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'workshop.core',
+    'workshop.subscriptions',
     'django_extensions',
     'test_without_migrations',
 ]
