@@ -35,4 +35,8 @@ class SubscribeTest(TestCase):
         form = self.resp.context['form']
         self.assertIsInstance(form, SubscriptionForm)
 
+    def test_form_has_fields(self):
+        """Form must have some fields"""
+        form = self.resp.context['form']
+        self.assertSequenceEqual(['name', 'cpf','email','phone'], list(form.fields))
 
