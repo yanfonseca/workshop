@@ -1,3 +1,4 @@
+from django.core import mail
 from django.test import TestCase
 from django.shortcuts import resolve_url as r
 from workshop.subscriptions.forms import SubscriptionForm
@@ -52,3 +53,14 @@ class SubscribePostValid(TestCase):
 
         resp = self.client.post('/inscricao/', post_exemple)
         self.assertEqual(302, resp.status_code)
+
+    def test_send_subscribe(self):
+        """Valid POST must send one email"""
+        post_exemple = dict(
+            zip(
+                ('name', 'cpf', 'email', 'phone'),
+                ('John Doe', '12345678901', 'john@teste.com', '(61)99999-9999')
+            )
+        )
+        resp = self.client.post('/inscricao/', post_exemple)
+        self.assertEqual(1, len(mail.outbox))
