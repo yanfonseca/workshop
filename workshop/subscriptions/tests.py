@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.shortcuts import resolve_url as r
 from workshop.subscriptions.forms import SubscriptionForm
 
-class SubscribeTest(TestCase):
+class SubscribeTestGet(TestCase):
 
     # Testa a página inscricao e seu form
     def setUp(self):
@@ -10,7 +10,7 @@ class SubscribeTest(TestCase):
         self.resp = self.client.get(r('inscricao'))
 
     def test_get(self):
-        """Get /cadastro/ must retunr status code 200"""
+        """Get /cadastro/ must return status code 200"""
         self.assertEqual(200, self.resp.status_code)
 
     def test_template(self):
@@ -40,3 +40,15 @@ class SubscribeTest(TestCase):
         form = self.resp.context['form']
         self.assertSequenceEqual(['name', 'cpf','email','phone'], list(form.fields))
 
+class SubscribePostValid(TestCase):
+    def test_post(self):
+        """Valid Post must redirect to /subscribe/"""
+        post_exemple = dict(
+            zip(
+                ('name', 'cpf', 'email', 'phone'),
+                ('John Doe', '12345678901', 'john@teste.com', '(61)99999-9999')
+            )
+        )
+
+        resp = self.client.post('/inscricao/', post_exemple)
+        self.assertEqual(302, resp.status_code)
