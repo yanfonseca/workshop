@@ -1,0 +1,9 @@
+Olá!
+
+Bem vindo ao melhor workshop do mundo!
+
+Os dados informados foram:
+nome: {{name}}
+cpf: {{cpf}}
+Email: {{email}}
+Telefone: {{phone}}
