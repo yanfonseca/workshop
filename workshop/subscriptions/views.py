@@ -1,8 +1,10 @@
 from django.conf import settings
 from django.contrib import messages
 from django.core import mail
+
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
+from django.shortcuts import resolve_url as r
 
 from workshop.subscriptions.forms import SubscriptionForm
 
@@ -22,7 +24,7 @@ def subscribe(request):
             mail.send_mail(subject=subject, message=body,
                            from_email=from_email, recipient_list=recipient_list)
             messages.success(request, "Formulário enviado!")
-            return redirect('/inscricao/')
+            return redirect(r('inscricao'))
 
         else:
             context = {'form': form}

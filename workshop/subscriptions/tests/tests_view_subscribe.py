@@ -17,7 +17,7 @@ class SubscribeTestGet(TestCase):
         """Must return subscriptions/subscription_form.html"""
         self.assertTemplateUsed(self.resp, 'subscriptions/subscription_form.html')
 
-    def test_htmlpage(self):
+    def test_template_html(self):
         """Must contain input tags in the html"""
 
         html = (('<form', 1),
@@ -40,11 +40,6 @@ class SubscribeTestGet(TestCase):
         form = self.resp.context['form']
         self.assertIsInstance(form, SubscriptionForm)
 
-    def test_form_has_fields(self):
-        """Form must have some fields"""
-        form = self.resp.context['form']
-        self.assertSequenceEqual(['name', 'cpf', 'email', 'phone'], list(form.fields))
-
 
 class SubscribePostValid(TestCase):
 
@@ -61,37 +56,9 @@ class SubscribePostValid(TestCase):
         """Valid Post must redirect to /subscribe/"""
         self.assertEqual(302, self.resp.status_code)
 
-    def test_send_subscribe(self):
+    def test_send_email(self):
         """Valid POST must send one email"""
         self.assertEqual(1, len(mail.outbox))
-
-    def test_subscription_subject_email(self):
-        """Must return a standard subject"""
-        email = mail.outbox[0]
-        expected = 'Formulário preenchido com sucesso'
-        self.assertEqual(expected, email.subject)
-
-    def test_subscription_from_email(self):
-        """Must return the email sender"""
-        email = mail.outbox[0]
-        expected = 'sender@email.com'
-        self.assertEqual(expected, email.from_email)
-
-    def test_subscription_email_to(self):
-        """Must return the email to"""
-        email = mail.outbox[0]
-        expected = ['sender@email.com', 'john@email.com']
-        self.assertEqual(expected, email.to)
-
-    def test_subscription_email_message(self):
-        """Must return the email message with subscriber data"""
-        email = mail.outbox[0]
-
-        contents = ('John Doe', '12345678901', 'john@email.com', '(61)99999-9999')
-
-        for content in contents:
-            with self.subTest():
-                self.assertIn(content, email.body)
 
 
 class SubscribeInvalidPost(TestCase):

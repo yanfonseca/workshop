@@ -5,7 +5,7 @@ from django.shortcuts import resolve_url as r
 class HomeTest(TestCase):
 
     def setUp(self):
-        # Use resolve_url and avoid url hardcoded like '' or /subscribe/
+        # Use resolve_url and avoid url hardcoded like '/' or /subscribe/
         self.resp = self.client.get(r('home'))
 
     def test_get(self):
@@ -15,3 +15,7 @@ class HomeTest(TestCase):
     def test_template(self):
         """Must return index.html"""
         self.assertTemplateUsed(self.resp, 'index.html')
+
+    def test_subscription_link(self):
+        """Must contain link to subscriptions in index.html"""
+        self.assertContains(self.resp, 'href="/inscricao/"')
