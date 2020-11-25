@@ -8,21 +8,19 @@ from workshop.subscriptions.forms import SubscriptionForm
 
 
 def subscribe(request):
-
     if request.method == 'POST':
         form = SubscriptionForm(request.POST)
 
+        # Method is_valid() returns boolean and do full_clean() too if returns True
+        # The use of full_clean() alone accepts invalid forms
         if form.is_valid():
-            # form.full_clean()
             subject = 'Formulário preenchido com sucesso'
             body = render_to_string('subscriptions/subscription_email.txt', form.cleaned_data)
-            # from_email = 'sender@email.com'
             from_email = settings.DEFAULT_FROM_EMAIL
             to_email = form.cleaned_data['email']
             recipient_list = [from_email, to_email]
-            mail.send_mail(
-                subject=subject, message=body,
-                from_email=from_email, recipient_list=recipient_list)
+            mail.send_mail(subject=subject, message=body,
+                           from_email=from_email, recipient_list=recipient_list)
             messages.success(request, "Formulário enviado!")
             return redirect('/inscricao/')
 

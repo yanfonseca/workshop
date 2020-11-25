@@ -2,7 +2,7 @@ SECRET_KEY=Use_a_good_secret_key_to_deploy
 DEBUG=True
 ALLOWED_HOSTS=127.0.0.1, .localhost, .herokuapp.com
 
-Envio teste de e-mail visto no terminal
+#Teste de email visto no console
 EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
 EMAIL_HOST=localhost
 EMAIL_PORT=25

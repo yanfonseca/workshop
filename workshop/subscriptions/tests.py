@@ -6,9 +6,7 @@ from workshop.subscriptions.forms import SubscriptionForm
 
 class SubscribeTestGet(TestCase):
 
-    # Testa a página inscricao e seu form
     def setUp(self):
-        # self.resp = self.client.get('/inscricao/')
         self.resp = self.client.get(r('inscricao'))
 
     def test_get(self):
@@ -21,17 +19,22 @@ class SubscribeTestGet(TestCase):
 
     def test_htmlpage(self):
         """Must contain input tags in the html"""
-        self.assertContains(self.resp, '<form', 1)
-        self.assertContains(self.resp, '<input', 6)
-        self.assertContains(self.resp, 'type="text"', 3)
-        self.assertContains(self.resp, 'type="submit"', 1)
-        self.assertContains(self.resp, 'type="email"', 1)
+
+        html = (('<form', 1),
+                ('<input', 6),
+                ('type="text"', 3),
+                ('type="submit"', 1),
+                ('type="email"', 1))
+
+        for tag, count in html:
+            with self.subTest():
+                self.assertContains(self.resp, tag, count)
 
     def test_csrf(self):
         """Must contain csrf in the html"""
         self.assertContains(self.resp, 'csrfmiddlewaretoken')
 
-    # Conectar html e form
+    # Conect html and form
     def test_has_form(self):
         """Context must have subscription form"""
         form = self.resp.context['form']
@@ -44,104 +47,74 @@ class SubscribeTestGet(TestCase):
 
 
 class SubscribePostValid(TestCase):
-    def test_post(self):
-        """Valid Post must redirect to /subscribe/"""
+
+    def setUp(self):
         post_example = dict(
             zip(
                 ('name', 'cpf', 'email', 'phone'),
                 ('John Doe', '12345678901', 'john@email.com', '(61)99999-9999')
             )
         )
+        self.resp = self.client.post(r('inscricao'), post_example)
 
-        resp = self.client.post('/inscricao/', post_example)
-        self.assertEqual(302, resp.status_code)
+    def test_post(self):
+        """Valid Post must redirect to /subscribe/"""
+        self.assertEqual(302, self.resp.status_code)
 
     def test_send_subscribe(self):
         """Valid POST must send one email"""
-        post_example = dict(
-            zip(
-                ('name', 'cpf', 'email', 'phone'),
-                ('John Doe', '12345678901', 'john@email.com', '(61)99999-9999')
-            )
-        )
-        self.client.post('/inscricao/', post_example)
         self.assertEqual(1, len(mail.outbox))
 
     def test_subscription_subject_email(self):
         """Must return a standard subject"""
-        post_example = dict(
-            zip(
-                ('name', 'cpf', 'email', 'phone'),
-                ('John Doe', '12345678901', 'john@email.com', '(61)99999-9999')
-            )
-        )
-        self.client.post('/inscricao/', post_example)
         email = mail.outbox[0]
         expected = 'Formulário preenchido com sucesso'
         self.assertEqual(expected, email.subject)
 
     def test_subscription_from_email(self):
         """Must return the email sender"""
-        post_example = dict(
-            zip(
-                ('name', 'cpf', 'email', 'phone'),
-                ('John Doe', '12345678901', 'john@email.com', '(61)99999-9999')
-            )
-        )
-        self.client.post('/inscricao/', post_example)
         email = mail.outbox[0]
         expected = 'sender@email.com'
         self.assertEqual(expected, email.from_email)
 
     def test_subscription_email_to(self):
         """Must return the email to"""
-        post_example = dict(
-            zip(
-                ('name', 'cpf', 'email', 'phone'),
-                ('John Doe', '12345678901', 'john@email.com', '(61)99999-9999')
-            )
-        )
-        self.client.post('/inscricao/', post_example)
         email = mail.outbox[0]
         expected = ['sender@email.com', 'john@email.com']
         self.assertEqual(expected, email.to)
 
     def test_subscription_email_message(self):
         """Must return the email message with subscriber data"""
-        post_example = dict(
-            zip(
-                ('name', 'cpf', 'email', 'phone'),
-                ('John Doe', '12345678901', 'john@email.com', '(61)99999-9999')
-            )
-        )
-        self.client.post('/inscricao/', post_example)
         email = mail.outbox[0]
-        self.assertIn('John Doe', email.body)
-        self.assertIn('12345678901', email.body)
-        self.assertIn('john@email.com', email.body)
-        self.assertIn('(61)99999-9999', email.body)
+
+        contents = ('John Doe', '12345678901', 'john@email.com', '(61)99999-9999')
+
+        for content in contents:
+            with self.subTest():
+                self.assertIn(content, email.body)
 
 
 class SubscribeInvalidPost(TestCase):
+
+    def setUp(self):
+        self.resp = self.client.post(r('inscricao'), {})
+
     def test_post(self):
         """Invalid POST must not redirect"""
-        resp = self.client.post('/inscricao/', {})
-        self.assertEqual(200, resp.status_code)
+        self.assertEqual(200, self.resp.status_code)
 
     def test_template(self):
         """Must return subscriptions/subscription_form.html"""
-        resp = self.client.post('/inscricao/', {})
-        self.assertTemplateUsed(resp, 'subscriptions/subscription_form.html')
+        self.assertTemplateUsed(self.resp, 'subscriptions/subscription_form.html')
 
     def test_has_form(self):
-        """Must have a form"""
-        resp = self.client.post('/inscricao/', {})
-        form = resp.context['form']
+        """Must have a form as instance"""
+        form = self.resp.context['form']
         self.assertIsInstance(form, SubscriptionForm)
 
     def test_form_has_erro(self):
-        resp = self.client.post('/inscricao/', {})
-        form = resp.context['form']
+        """Must have message errors"""
+        form = self.resp.context['form']
         self.assertTrue(form.errors)
 
 
@@ -155,6 +128,6 @@ class SubscribeSucessMessage(TestCase):
             )
         )
 
-        # Redireciona??????
-        resp = self.client.post('/inscricao/', post_example, follow=True)
+        # Follow set to True and returns status 200
+        resp = self.client.post(r('inscricao'), post_example, follow=True)
         self.assertContains(resp, "Formulário enviado!")
