@@ -4,6 +4,13 @@
 {% block content %}
     <h2>Realize sua inscrição!</h2>
     <br>
+    {% if messages %}
+        {% for message in messages %}
+            <div>
+                <p>{{ message }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
     <form action="." method="post">{% csrf_token %}
         <p>
             <label for="{{form.name.id_for_label}}">{{form.name.label}}:&nbsp;&nbsp</label>

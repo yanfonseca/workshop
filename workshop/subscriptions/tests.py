@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.shortcuts import resolve_url as r
 from workshop.subscriptions.forms import SubscriptionForm
 
+
 class SubscribeTestGet(TestCase):
 
     # Testa a página inscricao e seu form
@@ -39,7 +40,8 @@ class SubscribeTestGet(TestCase):
     def test_form_has_fields(self):
         """Form must have some fields"""
         form = self.resp.context['form']
-        self.assertSequenceEqual(['name', 'cpf','email','phone'], list(form.fields))
+        self.assertSequenceEqual(['name', 'cpf', 'email', 'phone'], list(form.fields))
+
 
 class SubscribePostValid(TestCase):
     def test_post(self):
@@ -119,6 +121,7 @@ class SubscribePostValid(TestCase):
         self.assertIn('john@email.com', email.body)
         self.assertIn('(61)99999-9999', email.body)
 
+
 class SubscribeInvalidPost(TestCase):
     def test_post(self):
         """Invalid POST must not redirect"""
@@ -140,3 +143,18 @@ class SubscribeInvalidPost(TestCase):
         resp = self.client.post('/inscricao/', {})
         form = resp.context['form']
         self.assertTrue(form.errors)
+
+
+class SubscribeSucessMessage(TestCase):
+    def test_message(self):
+        """Should follow and show a message"""
+        post_example = dict(
+            zip(
+                ('name', 'cpf', 'email', 'phone'),
+                ('John Doe', '12345678901', 'john@email.com', '(61)99999-9999')
+            )
+        )
+
+        # Redireciona??????
+        resp = self.client.post('/inscricao/', post_example, follow=True)
+        self.assertContains(resp, "Formulário enviado!")
