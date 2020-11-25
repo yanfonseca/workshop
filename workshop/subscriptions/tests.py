@@ -118,3 +118,25 @@ class SubscribePostValid(TestCase):
         self.assertIn('12345678901', email.body)
         self.assertIn('john@email.com', email.body)
         self.assertIn('(61)99999-9999', email.body)
+
+class SubscribeInvalidPost(TestCase):
+    def test_post(self):
+        """Invalid POST must not redirect"""
+        resp = self.client.post('/inscricao/', {})
+        self.assertEqual(200, resp.status_code)
+
+    def test_template(self):
+        """Must return subscriptions/subscription_form.html"""
+        resp = self.client.post('/inscricao/', {})
+        self.assertTemplateUsed(resp, 'subscriptions/subscription_form.html')
+
+    def test_has_form(self):
+        """Must have a form"""
+        resp = self.client.post('/inscricao/', {})
+        form = resp.context['form']
+        self.assertIsInstance(form, SubscriptionForm)
+
+    def test_form_has_erro(self):
+        resp = self.client.post('/inscricao/', {})
+        form = resp.context['form']
+        self.assertTrue(form.errors)
