@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'workshop.core',
-    'workshop.subscriptions',
+    #'workshop.subscriptions', This alteration is necessary to django admin interface receive layout changes.
+    'workshop.subscriptions.apps.SubscriptionsConfig',
     'django_extensions',
     'test_without_migrations',
 ]
@@ -114,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br' # 'en-us'
 
 TIME_ZONE = 'UTC'
 

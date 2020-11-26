@@ -35,3 +35,8 @@ heroku config:set DEBUG=False
 git push heroku main
 ```
 
+1. Crie um super user para acessar o /admin
+
+```console
+heroku run python manage.py createsuperuser
+```
