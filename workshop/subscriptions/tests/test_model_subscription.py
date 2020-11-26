@@ -50,3 +50,15 @@ class SubscriptionModelTest(TestCase):
         obj = Subscription(**post_example)
         obj.save()
         self.assertEqual('John Doe', str(obj))
+
+    def test_paid_default_false(self):
+        """Must return false by default"""
+        post_example = dict(
+            zip(
+                ('name', 'cpf', 'email', 'phone'),
+                ('John Doe', '12345678901', 'john@email.com', '(61)99999-9999')
+            )
+        )
+        obj = Subscription(**post_example)
+        obj.save()
+        self.assertEqual(False, obj.paid)

@@ -10,7 +10,7 @@ class SubscriptionModelAdmin(admin.ModelAdmin):
     # Add a display columns names in /admin
     list_display = ('name', 'email',
                     'phone', 'cpf',
-                    'created_at', 'subscribed_today')
+                    'created_at', 'subscribed_today', 'paid')
 
     # Add a hierarchy ordenation for the column
     date_hierarchy = 'created_at'
@@ -19,7 +19,7 @@ class SubscriptionModelAdmin(admin.ModelAdmin):
     search_fields = ('name', 'email', 'phone', 'cpf', 'created_at')
 
     # Add a filter to facilitate the user's navigation
-    list_filter = ('created_at',)
+    list_filter = ('created_at','paid')
 
     # Add a column with True/False values
     def subscribed_today(self, obj):

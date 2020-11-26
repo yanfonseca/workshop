@@ -22,6 +22,8 @@ python manage.py test
 ```
 
 ## Como fazer o deploy
+
+### Configurações do Heroku
 1. Crie uma instância no heroku
 1. Envie as configurações para o heroku
 1. Defina uma SECRET_KEY segura para a instância
@@ -41,10 +43,10 @@ heroku config:set EMAIL_HOST_USER=******
 heroku config:set EMAIL_HOST_PASSWORD=******
 ```
 
+### Enviar para o Heroku e criar migrações
 1. Envie o código para o heroku
 1. Faça as migrações no heroku
-1. Criei um super-user para o /admim
-
+1. Crie um super-user para o /admim
 
 ```console
 git push heroku main
