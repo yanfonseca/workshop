@@ -2,6 +2,7 @@ from django.core import mail
 from django.test import TestCase
 from django.shortcuts import resolve_url as r
 from workshop.subscriptions.forms import SubscriptionForm
+from workshop.subscriptions.models import Subscription
 
 
 class SubscribeTestGet(TestCase):
@@ -59,6 +60,10 @@ class SubscribePostValid(TestCase):
     def test_send_email(self):
         """Valid POST must send one email"""
         self.assertEqual(1, len(mail.outbox))
+
+    def test_save_subscription(self):
+        """Valid POST must save content in the data base"""
+        self.assertTrue(Subscription.objects.exists())
 
 
 class SubscribeInvalidPost(TestCase):

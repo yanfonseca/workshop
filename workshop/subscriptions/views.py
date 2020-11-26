@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 from django.shortcuts import resolve_url as r
 
 from workshop.subscriptions.forms import SubscriptionForm
+from workshop.subscriptions.models import Subscription
 
 
 def subscribe(request):
@@ -33,6 +34,9 @@ def create_subscription(request):
 
     # Show success
     messages.success(request, "Formulário enviado!")
+
+    # Save data in the Data base
+    Subscription.objects.create(**form.cleaned_data)
 
     return redirect(r('inscricao'))
 
