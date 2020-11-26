@@ -26,17 +26,28 @@ python manage.py test
 1. Envie as configurações para o heroku
 1. Defina uma SECRET_KEY segura para a instância
 1. Defina DEBUG=False
-1. Envie o código para o heroku
+1. Defina o smtp do gmail ou outro serviço
+1. Defina configurações para envio de e-mail
 
 ```console
-heroku apps:create yourname-workshop
+heroku apps:create <yourname>-workshop
 heroku config:set SECRET_KEY=`python contrib/secret_gen.py`
 heroku config:set DEBUG=False
-git push heroku main
+heroku config:set EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+heroku config:set EMAIL_HOST=******
+heroku config:set EMAIL_PORT=587
+heroku config:set EMAIL_USE_TLS=True
+heroku config:set EMAIL_HOST_USER=******
+heroku config:set EMAIL_HOST_PASSWORD=******
 ```
 
-1. Crie um super user para acessar o /admin
+1. Envie o código para o heroku
+1. Faça as migrações no heroku
+1. Criei um super-user para o /admim
+
 
 ```console
+git push heroku main
+heroku run python manage.py migrate
 heroku run python manage.py createsuperuser
 ```

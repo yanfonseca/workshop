@@ -11,6 +11,7 @@ from workshop.subscriptions.models import Subscription
 # (2) You have to migrate first before deployment and to do test with the migrations
 # python manage.py makemigrations
 # python manage.py migrate
+# python manage.py test
 
 class SubscriptionModelTest(TestCase):
     def test_create_model(self):
