@@ -21,6 +21,12 @@ cp contrib/env-sample .env
 python manage.py test
 ```
 
+## Abrir o projeto
+```console
+python manage.py migrate
+python manage.py runserver
+```
+
 ## Como fazer o deploy
 
 ### Configurações do Heroku
