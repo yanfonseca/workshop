@@ -21,6 +21,9 @@ class SubscriptionModelAdmin(admin.ModelAdmin):
     # Add a filter to facilitate the user's navigation
     list_filter = ('created_at','paid')
 
+    # Actions
+    actions = ['mark_as_paid']
+
     # Add a column with True/False values
     def subscribed_today(self, obj):
         return obj.created_at.day == now().day
@@ -30,6 +33,18 @@ class SubscriptionModelAdmin(admin.ModelAdmin):
 
     # If want to a graphic marker uncomment the line above
     #subscribed_today.boolean = True
+
+    def mark_as_paid(self, request, queryset):
+        count = queryset.update(paid=True)
+
+        if count == 1:
+            msg = '{} inscrição foi marcada como paga.'
+        else:
+            msg = '{} inscrições foram marcada como pagas.'
+
+        self.message_user(request, msg.format(count))
+
+    mark_as_paid.short_description = 'Marcar como pago'
 
 
 # Register the model Subscription in /admin and accepts alterations in the apresentation in the django admin
