@@ -15,3 +15,9 @@ class SubscriptionForm(forms.Form):
     cpf = forms.CharField(label='CPF', validators=[validade_cpf])
     email = forms.EmailField(label='Email')
     phone = forms.CharField(label='Celular')
+
+    # clean_ is a standard that django searches for, like test_ from unittest
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        capitalized_name = [w.capitalize() for w in name.split()]
+        return ' '.join(capitalized_name)
